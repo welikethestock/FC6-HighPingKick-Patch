@@ -84,6 +84,7 @@ int main()
         return ExitWithMessage("CreateRemoteThread failed\n");
     }
 
+    printf("CreateRemoteThread successful\nWaiting for thread to finish\n");
     WaitForSingleObject(Thread, INFINITE);
 
     printf("Injected successfully\n");

@@ -8,8 +8,7 @@ namespace SigScan
 {
     typedef UINT64 UInt64;
 
-    __declspec(noinline)
-        void *FindAddress(HMODULE Module, const byte *Pattern, const char *Mask, const char *Section = NULL);
+    void *FindAddress(HMODULE Module, const byte *Pattern, const char *Mask);
 }
 
 #endif

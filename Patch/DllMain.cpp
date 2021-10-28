@@ -11,7 +11,7 @@ void InstallPatch()
 
     if (HighPingKickAddress == NULL)
     {
-        MessageBoxA(NULL, "SigScan failed", NULL, MB_OK);
+        MessageBoxA(NULL, "SigScan failed, outdated, contact author", "HighPingKickPatch", MB_OK);
 
         return;
     }

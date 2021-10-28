@@ -84,14 +84,12 @@ int main()
         return ExitWithMessage("CreateRemoteThread failed\n");
     }
 
-    printf("CreateRemoteThread successful\nWaiting for thread to finish\n");
+    printf("CreateRemoteThread successful\nWaiting for thread to finish...\n");
     WaitForSingleObject(Thread, INFINITE);
-
-    printf("Injected successfully\n");
 
     CloseHandle(Thread);
     VirtualFreeEx(Process, Memory, 0, MEM_RELEASE);
     CloseHandle(Process);
 
-    return 0;
+    return ExitWithMessage("Injected successfully\n");;
 }

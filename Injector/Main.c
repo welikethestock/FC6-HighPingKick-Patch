@@ -4,39 +4,42 @@
 #include <psapi.h>
 #include <TlHelp32.h>
 
-DWORD FindPID()
+DWORD FindPID(const char *Executable)
 {
     PROCESSENTRY32 Entry;
     Entry.dwSize = sizeof(PROCESSENTRY32);
-
     HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 
-    if (Process32First(Snapshot, &Entry) == TRUE)
+    if (!Process32First(Snapshot, &Entry))
     {
-        while (Process32Next(Snapshot, &Entry) == TRUE)
-        {
-            if (stricmp(Entry.szExeFile, "FarCry6.exe") == 0)
-            {
-                CloseHandle(Snapshot);
+        CloseHandle(Snapshot);
 
-                return Entry.th32ProcessID;
-            }
+        return NULL;
+    }
+
+    while (Process32Next(Snapshot, &Entry))
+    {
+        if (stricmp(Entry.szExeFile, Executable) == 0)
+        {
+            CloseHandle(Snapshot);
+
+            return Entry.th32ProcessID;
         }
     }
 
     CloseHandle(Snapshot);
 
-    Sleep(100);
+    return NULL;
 }
 
-#define PATCH_FILE  "Patch.dll"
+#define PATCH_FILE      "Patch.dll"
+#define GAME_EXECUTABLE "FarCry6.exe"
 
 int ExitWithMessage(const char *Message)
 {
     printf(Message);
-    getchar();
 
-    return 0;
+    return getchar();
 }
 
 int main()
@@ -48,7 +51,7 @@ int main()
     DWORD ProcessID = NULL;
     do
     {
-        ProcessID = FindPID();
+        ProcessID = FindPID(GAME_EXECUTABLE);
 
         Sleep(1);
     } while (ProcessID == NULL);
@@ -91,5 +94,5 @@ int main()
     VirtualFreeEx(Process, Memory, 0, MEM_RELEASE);
     CloseHandle(Process);
 
-    return ExitWithMessage("Injected successfully\n");;
+    return ExitWithMessage("Injected successfully\n");
 }
